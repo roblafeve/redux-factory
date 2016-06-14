@@ -4,5 +4,7 @@ Object.defineProperty(exports, '__esModule', {
   value: true
 })
 
-exports.default = require('./src/factory')
-exports.compose = require('./src/factoryCompose')
+module.exports = require('./src/factory')
+module.exports.compose = require('./src/compose')
+
+console.log(module);

@@ -1,7 +1,7 @@
-var reduxFactory = require('factory')
-var compose = require('factoryCompose')
+var factory = require('factory')
+var compose = require('compose')
 
-var list = reduxFactory(
+var list = factory(
   { list: [], name: 'Rob' },
   {
     add:     function(x, y) { return {list: y.list.concat(x)} },
@@ -9,27 +9,47 @@ var list = reduxFactory(
   }
 )
 
-var other = reduxFactory(
+var other = factory(
   { name: '' },
   {
     changeName: function(x) { return {name: x} }
   }
 )
 
-var yetAnother = reduxFactory(
+var yetAnother = factory(
   { age: 21 },
   {
-    setAge: function(x) { return {age: x} }  
+    setAge: function(x) { return {age: x} }
   }
 )
 
-describe('reduxFactoryCompose', function() {
+describe('compose', function() {
   it('returns combined reduxFactories', function() {
     var actual = compose(list, other, 'user')
     var wanted = [
       'userAdd',
       'userChangeName',
       'reducer'
+    ]
+    expect(actual).has.keys(wanted)
+  })
+  it('returns curried function if string prefix is not passed', function() {
+    var actual = compose(list, other)('user')
+    var wanted = [
+      'userAdd',
+      'userChangeName',
+      'reducer'
+    ]
+    expect(actual).has.keys(wanted)
+  })
+  it('can be nested in another compose', function() {
+    var first = compose(list, other)
+    var actual = compose(first, yetAnother, 'user')
+    var wanted = [
+      'userAdd',
+      'userChangeName',
+      'reducer',
+      'userSetAge'
     ]
     expect(actual).has.keys(wanted)
   })

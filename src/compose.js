@@ -1,9 +1,21 @@
 var R = require('ramda')
 var composeV = require('compose-v')
 
-module.exports = R.curry(function() {
+
+
+module.exports = function() {
   var args              = [].slice.call(arguments)
   var prefix            = args.slice(-1)[0]
+  if (typeof(prefix) == 'string') {
+    return comosed(args, prefix)
+  } else {
+    return function(prefix) {
+      return comosed(args, prefix)
+    }
+  }
+}
+
+function comosed(args, prefix) {
   var factories         = composeV(R.reverse)(args.slice(0, -1))
   var getInitState      = function(x) { return x(undefined, {type: null}) }
   var applyPrefix       = function(x) { return x(prefix) }
@@ -13,7 +25,6 @@ module.exports = R.curry(function() {
   var composedReducer   = { reducer: function(state, action) {
     return composeV.apply(null, reducers)(state || initState, action) }
   }
-
   return R.mergeAll(R.concat(prefixedFactories, composedReducer))
 
-})
+}
