@@ -7,7 +7,7 @@
     "test": "NODE_PATH=./src mocha",
     "test:watch": "npm run test -- -w",
     "test:cover": "nyc npm run test",
-    "report-coverage": "nyc report --reporter=lcov > coverage.lcov && codecov"
+    "test:report-coverage": "nyc report --reporter=lcov > coverage.lcov && codecov"
   },
   "repository": {
     "type": "git",
