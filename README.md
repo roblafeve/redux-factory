@@ -7,7 +7,7 @@ Composable, curried factory for creating Redux reducers and actions. Being curri
 
 Beyond this, Redux Factory provides a `compose` function that allows you to combine any number of un-prefixed factories in order to maximize flexibility and code reuse.
 
-> Note: This library embraces some basic ideas from functional programing (curry, compose). While I believe these are powerful tools, this may not be your _'cup of tea'_. If not, you may consider using [redux-act](https://github.com/pauldijou/redux-act).
+> Note: This library embraces some basic ideas from functional programing (curry, compose). While I believe these are powerful tools, this may not be your _'cup of tea'_ ☕. If not, you may consider using [redux-act](https://github.com/pauldijou/redux-act).
 
 ## Install
 
