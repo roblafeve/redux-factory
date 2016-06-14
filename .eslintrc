@@ -1,0 +1,24 @@
+{
+  "env": {
+    "browser": false,
+    "es6": false,
+    "node": true,
+    "mocha": true
+  },
+  "extends": "eslint:recommended",
+  "parserOptions": {},
+  "parser": "",
+  "plugins": [],
+  "globals": {
+    "expect": true
+  },
+  "rules": {
+    "indent": ["error", 2, {SwitchCase: 1}],
+    "linebreak-style": ["error", "unix"],
+    "quotes": ["error", "single", {"allowTemplateLiterals": true}],
+    "semi": ["error", "never"],
+    "strict": 0,
+    "no-case-declarations": 2,
+    "no-console": 0
+  }
+}

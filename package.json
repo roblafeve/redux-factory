@@ -1,0 +1,46 @@
+{
+  "name": "redux-factory",
+  "version": "1.0.0",
+  "description": "Composable, curried factory for creating Redux reducers and actions",
+  "main": "index.js",
+  "scripts": {
+    "test": "NODE_PATH=./src mocha",
+    "test:watch": "npm run test -- -w",
+    "test:cover": "nyc npm run test",
+    "report-coverage": "nyc report --reporter=lcov > coverage.lcov && codecov"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/roblafeve/redux-factory.git"
+  },
+  "keywords": [
+    "composable",
+    "curried",
+    "functional",
+    "redux",
+    "reducer",
+    "action"
+  ],
+  "author": "Rob LaFeve",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/roblafeve/redux-factory/issues"
+  },
+  "homepage": "https://github.com/roblafeve/redux-factory#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "codecov": "^1.0.1",
+    "flux-standard-action": "^0.6.1",
+    "mocha": "^2.5.3",
+    "nyc": "^6.4.4"
+  },
+  "nyc": {
+    "exclude": [
+      "test"
+    ]
+  },
+  "dependencies": {
+    "compose-v": "^1.0.3",
+    "ramda": "^0.21.0"
+  }
+}
