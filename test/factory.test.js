@@ -13,8 +13,6 @@ var testReducer = reducer(
   'USER'
 )
 
-// console.log(testReducer)
-
 describe('reduxFactory :: (Object, [Object], String) -> Object', function() {
   it('exists', function() { expect(reducer).to.exist })
   it('returns an object', function() {
