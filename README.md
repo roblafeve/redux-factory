@@ -1,9 +1,11 @@
-# composeV
+# Redux Factory
 
 [![codecov](https://codecov.io/gh/roblafeve/redux-factory/branch/master/graph/badge.svg)](https://codecov.io/gh/roblafeve/redux-factory)
 [![Build Status](https://travis-ci.org/roblafeve/redux-factory.svg?branch=master)](https://travis-ci.org/roblafeve/redux-factory)
 
-Composes variadic functions (_n_-ary). **composeV** handles unary functions the same as compose `((x) -> (x) -> (x)) -> (x)`, but can also handle miss-matched arities `((x, y), (x), (x, y, z), ...) -> (x, y, z, ...)`. Composed functions are nested in `parameters[0]` while the remaining arguments are passed to `parameters[1...]`. This can be useful when you need to compose functions while still being able to pass the same arguments into each successive function unchanged.
+Redux Factory is a functional approach to creating your Redux actions and reducers. Since it is curried, you can supply an initial state and define your actions, but omit the prefix argument that is required to finally generate your actionCreator and reducer functions. Doing this allows you to export a base configuration to be used in any number of distinct portions of your state tree.
+
+Beyond this, Redux Factory provides a `compose` function that allows you to combine any number of un-prefixed factories in order to maximize flexibility and code reuse.
 
 > Note: composeV is non-curried (compose isn't typically). Be sure to reference [ramda](http://ramdajs.com/0.21.0/index.html) or a comparable library to make sure there isn't a better fit out there for your particular use-case.
 
