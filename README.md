@@ -98,10 +98,20 @@ export default compose(list, dogs, prefix) // compose :: (Function, ..., String)
 ### Factory
 - Signature: `(Object: initialState, Object: actions, String: prefix) -> Object`
 - Curried: `true` (all arguments may be partially applied)
+- Parameters:
+  - **initialState**: object required by redux
+  - **actions**: object of action methods (e.g. `{ actionName: x => ({name: x}) }`)
+    - `payload` is the first parameter since it is always used
+    - `state` is the second parameter as it is often unused
+  - **prefix**: string used to create unique actions and reducers
+- Returns: object with prefixed action method(s) and a reducer method
 
 ### Compose
 - Signature: `(Function: unprefixed Factory || unprefixed Compose, ..., String: prefix) -> Object`
 - Curried: `true` (if a string prefix is not applied as final argument)
+- Parameters:
+  - **All but last**: unprefixed Factory or Compose functions
+  - **Last**: prefix string used to create unique actions and reducers
 
 ## License
 
