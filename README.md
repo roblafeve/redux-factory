@@ -36,8 +36,8 @@ const actions = {
 export default factory(initialState, actions, prefix) // factory :: (Object, Object, String) -> Object
 // The above code exports an object for use in your app:
 // {
-//   usersAdd: [Function],
-//   usersSetActivity: [Function],
+//   add: [Function],
+//   setActivity: [Function],
 //   reducer: [Function]
 // }
 ```
@@ -80,11 +80,11 @@ const dogs = factory(dogsInitialState, dogsActions) // factory :: (Object, Objec
 export default compose(list, dogs, prefix) // compose :: (Function, ..., String) -> Object
 // The above code exports an object for use in your app:
 // {
-//   dogsAdd: [Function],
-//   dogsSetActivity: [Function],
-//   dogsBarking: [Function],
-//   dogsPooping: [Function],
-//   dogsRunning: [Function],
+//   add: [Function],
+//   setActivity: [Function],
+//   barking: [Function],
+//   pooping: [Function],
+//   running: [Function],
 //   reducer: [Function]
 // }
 ```

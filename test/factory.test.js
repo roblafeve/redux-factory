@@ -30,7 +30,7 @@ describe('reduxFactory :: (Object, [Object], String) -> Object', function() {
       expect(actual).eql(wanted)
     })
     it('handles action', function() {
-      var actual = testReducer.reducer({list: ['Tim']}, testReducer.userListAdd('Joe'))
+      var actual = testReducer.reducer({list: ['Tim']}, testReducer.listAdd('Joe'))
       var wanted = {list: ['Tim', 'Joe']}
       expect(actual).eql(wanted)
     })

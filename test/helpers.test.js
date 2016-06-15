@@ -31,7 +31,7 @@ describe('helpers:', function() {
   describe('methodized()', function() {
     it('exists', function() { expect(helpers.methodized).to.exist })
     it('returns actionCreator method', function() {
-      var actual = helpers.methodized('userTest').userTest('tim')
+      var actual = helpers.methodized('user', 'test').test('tim')
       var wanted = {type: 'USER_TEST', payload: 'tim'}
       expect(actual).eql(wanted)
     })
@@ -54,7 +54,7 @@ describe('helpers:', function() {
     })
     it('returns object with matching methods', function() {
       var actual = helpers.methodObject('user')(['rob', 'tim'])
-      var wanted = [ 'userRob', 'userTim' ]
+      var wanted = [ 'rob', 'tim' ]
       expect(actual).have.keys(wanted)
     })
   })
