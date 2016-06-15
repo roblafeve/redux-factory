@@ -27,8 +27,8 @@ describe('compose', function() {
   it('returns combined reduxFactories', function() {
     var actual = compose(list, other, 'user')
     var wanted = [
-      'userAdd',
-      'userChangeName',
+      'add',
+      'changeName',
       'reducer'
     ]
     expect(actual).has.keys(wanted)
@@ -36,8 +36,8 @@ describe('compose', function() {
   it('returns curried function if string prefix is not passed', function() {
     var actual = compose(list, other)('user')
     var wanted = [
-      'userAdd',
-      'userChangeName',
+      'add',
+      'changeName',
       'reducer'
     ]
     expect(actual).has.keys(wanted)
@@ -46,10 +46,10 @@ describe('compose', function() {
     var first = compose(list, other)
     var actual = compose(first, yetAnother, 'user')
     var wanted = [
-      'userAdd',
-      'userChangeName',
+      'add',
+      'changeName',
       'reducer',
-      'userSetAge'
+      'setAge'
     ]
     expect(actual).has.keys(wanted)
   })
@@ -61,25 +61,25 @@ describe('compose', function() {
   })
   it('conflicting keys are merged right to left', function() {
     var combined = compose(list, other, 'user')
-    var actual = combined.reducer(undefined, combined.userChangeName('Rob'))
+    var actual = combined.reducer(undefined, combined.changeName('Rob'))
     var wanted = {name: 'Rob', list: []}
     expect(actual).eql(wanted)
   })
   it('handles actions from first factory', function() {
     var combined = compose(list, other, 'user')
-    var actual = combined.reducer({list: [], name: ''}, combined.userAdd({name: 'Rob'}))
+    var actual = combined.reducer({list: [], name: ''}, combined.add({name: 'Rob'}))
     var wanted = {list: [{name: 'Rob'}], name: ''}
     expect(actual).eql(wanted)
   })
   it('handles actions from second factory', function() {
     var combined = compose(list, other, 'user')
-    var actual = combined.reducer({list: [], name: ''}, combined.userChangeName('Rob'))
+    var actual = combined.reducer({list: [], name: ''}, combined.changeName('Rob'))
     var wanted = {list: [], name: 'Rob'}
     expect(actual).eql(wanted)
   })
   it('handles actions from third factory', function() {
     var combined = compose(list, other, yetAnother, 'user')
-    var actual = combined.reducer({list: [], name: 'Rob'}, combined.userSetAge(31))
+    var actual = combined.reducer({list: [], name: 'Rob'}, combined.setAge(31))
     var wanted = {list: [], name: 'Rob', age: 31}
     expect(actual).eql(wanted)
   })
