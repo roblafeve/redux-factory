@@ -1,6 +1,6 @@
 {
   "name": "redux-factory",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Composable, curried factory for creating Redux reducers and actions",
   "main": "index.js",
   "scripts": {

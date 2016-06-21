@@ -1,25 +1,26 @@
 var factory = require('factory')
 var compose = require('compose')
+var R = require('ramda')
 
 var list = factory(
   { list: [], name: 'Rob' },
   {
-    add:     function(x, y) { return {list: y.list.concat(x)} },
-    changeName: function(x) { return {name: 'Your name is ' + x} }
+    add:        function(x, y) { return R.merge(x, {list: x.list.concat(y)}) },
+    changeName: function(x, y) { return R.merge(x, {name: 'Your name is ' + y}) }
   }
 )
 
 var other = factory(
   { name: '' },
   {
-    changeName: function(x) { return {name: x} }
+    changeName: function(x, y) { return R.merge(x, {name: y}) }
   }
 )
 
 var yetAnother = factory(
   { age: 21 },
   {
-    setAge: function(x) { return {age: x} }
+    setAge: function(x, y) { return R.merge(x, {age: y}) }
   }
 )
 

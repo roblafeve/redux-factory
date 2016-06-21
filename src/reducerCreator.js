@@ -12,7 +12,7 @@ module.exports = R.curry(function(initialState, actionDefinitions, prefix) {
           var keyType = toConst(key)
           return [
             function() { return keyType == action.type },
-            function() { return R.merge(state, actionDef[1](action.payload, state || initialState)) }
+            function() { return actionDef[1](state || initialState, action.payload) }
           ]
         },
         R.toPairs(actionDefinitions)))
