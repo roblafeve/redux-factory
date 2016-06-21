@@ -29,8 +29,8 @@ const initialState = { // required by Redux
 }
 
 const actions = {
-  add: (payload, state) => {list: [...state, payload]},
-  setActivity: payload => ({activity: payload})
+  add: (state, payload) => Object.assign({}, state, {list: [...state, payload]}),
+  setActivity: (state, payload) => Object.assign({}, state, {activity: payload})
 }
 
 export default factory(initialState, actions, prefix) // factory :: (Object, Object, String) -> Object
@@ -55,8 +55,8 @@ const listInitialState = { // required by Redux
 }
 
 const listActions = {
-  add: (payload, state) => {list: [...state, payload]},
-  setActivity: payload => ({activity: payload})
+  add: (state, payload) => Object.assign({}, state, {list: [...state, payload]}),
+  setActivity: (state, payload) => Object.assign({}, state, {activity: payload})
 }
 
 const list = factory(listInitialState, listActions) // factory :: (Object, Object) -> Function
@@ -70,9 +70,9 @@ const dogsInitialState = {
 }
 
 const dogsActions = {
-  barking: x => ({ barking: x }),
-  pooping: x => ({ pooping: x }),
-  running: x => ({ running: x })
+  barking: (x, y) => Object.assign({}, x, { barking: y }),
+  pooping: (x, y) => Object.assign({}, x, { pooping: y }),
+  running: (x, y) => Object.assign({}, x, { running: y })
 }
 
 const dogs = factory(dogsInitialState, dogsActions) // factory :: (Object, Object) -> Function
@@ -100,11 +100,21 @@ export default compose(list, dogs, prefix) // compose :: (Function, ..., String)
 - Curried: `true` (all arguments may be partially applied)
 - Parameters:
   - **initialState**: object required by redux
-  - **actions**: object of action methods (e.g. `{ actionName: x => ({name: x}) }`)
-    - `payload` is the first parameter since it is always used
-    - `state` is the second parameter as it is often unused
+  - **actions**: object of action methods (e.g. `{ actionName: (state, payload) => Object.assign({}, state, {name: payload}) }`)
+    - `state` current state
+    - `payload` action payload
   - **prefix**: string used to create unique actions and reducers
-- Returns: object with prefixed action method(s) and a reducer method
+- Returns `Object` with action method(s) and a reducer method to export and use in your app:
+```js
+{
+  add: [Function],
+  setActivity: [Function],
+  barking: [Function],
+  pooping: [Function],
+  running: [Function],
+  reducer: [Function]
+}
+```
 
 ### Compose
 - Signature: `(Function: unprefixed Factory || unprefixed Compose, ..., String: prefix) -> Object`
@@ -112,6 +122,17 @@ export default compose(list, dogs, prefix) // compose :: (Function, ..., String)
 - Parameters:
   - **All but last**: unprefixed Factory or Compose functions
   - **Last**: prefix string used to create unique actions and reducers
+
+## Tips
+1. Use a helper to merge old and new state (e.g. Ramda's [merge](http://ramdajs.com/0.21.0/docs/#merge)). Originally, `redux-factory` automatically merged old/new state, but this proved unintuitive.
+
+```js
+import { merge } from 'ramda'
+// Much better!
+const actions = {
+  myAction: (x, y) => merge(x, {name: y})
+}
+```
 
 ## License
 

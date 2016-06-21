@@ -1,4 +1,5 @@
 var reducer = require('factory')
+var R = require('ramda')
 
 var testReducer = reducer(
   {
@@ -7,8 +8,8 @@ var testReducer = reducer(
     name: 'user'
   },
   {
-    listAdd: function(x,y) { return {list: y.list.concat(x)} },
-    nameEdit: function(x) { return {name: x} }
+    listAdd:  function(x,y) { return R.merge(x, {list: x.list.concat(y)}) },
+    nameEdit: function(x,y) { return R.merge(x, {name: y}) }
   },
   'USER'
 )
@@ -34,10 +35,19 @@ describe('reduxFactory :: (Object, [Object], String) -> Object', function() {
       var wanted = {list: ['Tim', 'Joe']}
       expect(actual).eql(wanted)
     })
-    it('handles bad action action', function() {
+    it('handles bad action', function() {
       var actual = testReducer.reducer({list: ['Tim']}, {type: 'NOT', payload: 'Joe'})
       var wanted = {list: ['Tim']}
       expect(actual).eql(wanted)
     })
+    it('can take any form of state (Array, Object, String)', function() {
+      var plainArray = reducer([], { add:  function(x,y) { return [].concat(x, y) } }, 'array')
+      var plainString = reducer('init', { add:  function(x,y) { return y } }, 'string')
+      expect(plainArray.reducer(undefined, plainArray.add('hi'))).eql(['hi'])
+      expect(plainArray.reducer(undefined, {type: 'NONE', payload: ''})).eql([])
+      expect(plainString.reducer(undefined, plainString.add('hi'))).eql('hi')
+      expect(plainString.reducer(undefined, {type: 'NONE', payload: ''})).eql('init')
+    })
   })
+
 })
