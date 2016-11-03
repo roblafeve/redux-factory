@@ -1,18 +1,18 @@
 var R = require('ramda')
-var constPrefixedWith = require('./helpers').constPrefixedWith
 
 module.exports = R.curry(function(initialState, actionDefinitions, prefix) {
-  var toConst = constPrefixedWith(prefix)
   return function(state, action) {
     return R.cond(
       R.append(
         [R.T, function() { return state || initialState }],
         R.map(function(actionDef) {
-          var key = actionDef[0]
-          var keyType = toConst(key)
+          var defKey = actionDef[0]
+          var defVal = actionDef[1]
+          var transform = typeof defVal == 'function' ? defVal : defVal.transform
+          var keyType = (defVal.prefixed === false || prefix === false) ? defKey : R.concat(prefix + '_', defKey)
           return [
             function() { return keyType == action.type },
-            function() { return actionDef[1](state || initialState, action.payload) }
+            function() { return transform(state || initialState, action.payload) }
           ]
         },
         R.toPairs(actionDefinitions)))

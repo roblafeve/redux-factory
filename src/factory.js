@@ -4,9 +4,8 @@ var methodObject = require('./helpers').methodObject
 
 // reduxFactory :: (Object, [Object], String) -> Object
 module.exports = R.curry(function(initialState, actionDefinitions, prefix) {
-  var names = Object.keys(actionDefinitions)
   return R.merge(
-    methodObject(prefix, names),
+    methodObject(prefix, actionDefinitions),
     { reducer: reducerCreator(initialState, actionDefinitions, prefix) }
   )
 })
