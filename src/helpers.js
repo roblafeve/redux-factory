@@ -1,8 +1,12 @@
-var R = require('ramda')
+var curry    = require('ramda/src/curry')
+var concat   = require('ramda/src/concat')
+var compose  = require('ramda/src/compose')
+var map      = require('ramda/src/map')
+var mergeAll = require('ramda/src/mergeAll')
 
-var methodized = R.curry(function(actionDefs, prefix, name) {
+var methodized = curry(function(actionDefs, prefix, name) {
   var obj = {}
-  var type = prefix === false ? name : R.concat(prefix + '_', name)
+  var type = prefix === false ? name : concat(prefix + '_', name)
   var meta = actionDefs[name].meta ? actionDefs[name].meta : null
   obj[name] = function(payload) {
     return {
@@ -16,8 +20,8 @@ var methodized = R.curry(function(actionDefs, prefix, name) {
 })
 exports.methodized = methodized
 
-var methodObject = R.curry(function(prefix, actionDefs) {
+var methodObject = curry(function(prefix, actionDefs) {
   var names = Object.keys(actionDefs)
-  return R.compose(R.mergeAll, R.map(methodized(actionDefs, prefix)))(names)
+  return compose(mergeAll, map(methodized(actionDefs, prefix)))(names)
 })
 exports.methodObject = methodObject
