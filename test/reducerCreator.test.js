@@ -15,7 +15,15 @@ describe('reducerCreator :: (Object, Array, String) -> (Object, Object) -> Objec
   it('reducer handles state and action',
     function() {
       var reducer = reducerCreator({name: 'rob'}, { actionType: function(x, y){ return R.merge(x, {name: y}) } }, 'prefix')
-      var actual = reducer(undefined, {type: 'PREFIX_ACTION_TYPE', payload: 'joe'})
+      var actual = reducer(undefined, {type: 'prefix_actionType', payload: 'joe'})
+      var wanted = {name: 'joe'}
+      expect(actual).eql(wanted)
+    })
+
+  it('reducer handles prefix `false`',
+    function() {
+      var reducer = reducerCreator({name: 'rob'}, { actionType: function(x, y){ return R.merge(x, {name: y}) } }, false)
+      var actual = reducer(undefined, {type: 'actionType', payload: 'joe'})
       var wanted = {name: 'joe'}
       expect(actual).eql(wanted)
     })

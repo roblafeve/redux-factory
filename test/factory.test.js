@@ -8,7 +8,13 @@ var testReducer = reducer(
     name: 'user'
   },
   {
-    listAdd:  function(x,y) { return R.merge(x, {list: x.list.concat(y)}) },
+    listAdd: {
+      transform: function(x,y) { return R.merge(x, {list: x.list.concat(y)}) },
+      prefixed: true,
+      meta: {
+        schema: 'userSchema'
+      }
+    },
     nameEdit: function(x,y) { return R.merge(x, {name: y}) }
   },
   'USER'

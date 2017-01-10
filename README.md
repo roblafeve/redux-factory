@@ -20,34 +20,43 @@ $ npm install --save redux-factory
 ### Basic
 ```js
 import factory from 'redux-factory'
+import { merge } from 'ramda' // or bring your own object merge
 
 const prefix = 'users' // `String` or `false`
 
 const initialState = { // required by Redux
   list: [],
-  activity: false
+  activity: false,
+  location: {}
 }
 
 const actions = {
-  add: (state, payload) => Object.assign({}, state, {list: [...state, payload]}),
-  setActivity: (state, payload) => Object.assign({}, state, {activity: payload})
+  add: (state, payload) => merge(state, {list: [...state, payload]}),
+  setActivity: (state, payload) => merge(state, {activity: payload}),
+  'UPDATE_LOCATION': {
+    transform: (state, payload) => merge(state, {location: payload}),
+    prefix: false, // Action type will be 'as-is' regardless of prefix passed to factory
+    meta: {} // Some middleware utilizes this
+  }
 }
 
-export default factory(initialState, actions, prefix) // factory :: (Object, Object, String) -> Object
+export default factory(initialState, actions, prefix) // factory :: (Object, Object, String|False) -> Object
 // The above code exports an object for use in your app:
 // {
 //   add: [Function],
 //   setActivity: [Function],
+//   UPDATE_LOCATION: [Function],
 //   reducer: [Function]
 // }
 ```
 > Notes:
-- The case of your prefix and action keys doesn't matter as they are always normalized to camelCase.
+- The case of your prefix and action keys _DO_ matter (this is the main breaking change with `3.0.0`—as they were always normalized). This allows you to format your action keys as you see fit. Also, with the addition of the alternate action config syntax (see above) which allows you to set the prefix to `false` on a per-action basis, it is now possible to handle a third-party action in any piece of your state (e.g. users could handle `UPDATE_LOCATION` from `redux-simple-router`).
 - Why the prefix? Namespace is all that distinguishes your action types. Unless your state is extremely simple they are very handy. Nevertheless, you may pass `false` as a third argument if you don't want it.
 
 ### Curried and composed
 ```js
 import factory, { compose } from 'redux-factory'
+import { merge } from 'ramda' // or bring your own object merge
 
 const listInitialState = { // required by Redux
   list: [],
@@ -55,8 +64,8 @@ const listInitialState = { // required by Redux
 }
 
 const listActions = {
-  add: (state, payload) => Object.assign({}, state, {list: [...state, payload]}),
-  setActivity: (state, payload) => Object.assign({}, state, {activity: payload})
+  add: (state, payload) => merge(state, {list: [...state, payload]}),
+  setActivity: (state, payload) => merge(state, {activity: payload})
 }
 
 const list = factory(listInitialState, listActions) // factory :: (Object, Object) -> Function
@@ -70,9 +79,9 @@ const dogsInitialState = {
 }
 
 const dogsActions = {
-  barking: (x, y) => Object.assign({}, x, { barking: y }),
-  pooping: (x, y) => Object.assign({}, x, { pooping: y }),
-  running: (x, y) => Object.assign({}, x, { running: y })
+  barking: (x, y) => merge(x, { barking: y }),
+  pooping: (x, y) => merge(x, { pooping: y }),
+  running: (x, y) => merge(x, { running: y })
 }
 
 const dogs = factory(dogsInitialState, dogsActions) // factory :: (Object, Object) -> Function
@@ -96,7 +105,20 @@ export default compose(list, dogs, prefix) // compose :: (Function, ..., String)
 ## API
 
 ### Factory
-- Signature: `(Object: initialState, Object: actions, String: prefix) -> Object`
+- Type Signature ([Guide to Type Signatures](https://github.com/ramda/ramda/wiki/Type-Signatures)):
+```js
+//  Factory :: InitialState → {k: Transform} → Prefix → {k: ActionCreator, reducer: Reducer}
+//          :: InitialState → {k: Config} → Prefix → {k: ActionCreator, reducer: Reducer}
+//          Action        = {type: String, payload: Payload, error: Bool, meta: a }
+//          ActionCreator = Payload → Action
+//          Config        = {transform: Transform, prefix: Bool, meta: a}
+//          InitialState  = a
+//          Payload       = a
+//          Prefix        = String
+//          Reducer       = (State, Action) → State
+//          State         = a
+//          Transform     = (State, Payload) → State
+```
 - Curried: `true` (all arguments may be partially applied)
 - Parameters:
   - **initialState**: object required by redux
@@ -105,6 +127,7 @@ export default compose(list, dogs, prefix) // compose :: (Function, ..., String)
     - `payload` action payload
   - **prefix**: string used to create unique actions and reducers
 - Returns `Object` with action method(s) and a reducer method to export and use in your app:
+
 ```js
 {
   add: [Function],
