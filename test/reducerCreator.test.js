@@ -28,4 +28,19 @@ describe('reducerCreator :: (Object, Array, String) -> (Object, Object) -> Objec
       expect(actual).eql(wanted)
     })
 
+  it('reducer handles unprefixed transform',
+    function() {
+      var reducer = reducerCreator({name: 'rob'}, {
+        actionType: {
+          transform: function(x, y) {
+            return R.merge(x, {name: y})
+          },
+          prefix: false
+        }
+      }, 'prefix')
+      var actual = reducer(undefined, {type: 'actionType', payload: 'joe'})
+      var wanted = {name: 'joe'}
+      expect(actual).eql(wanted)
+    })
+
 })

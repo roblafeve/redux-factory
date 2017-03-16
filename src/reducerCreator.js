@@ -17,7 +17,7 @@ module.exports = curry(function(initialState, transforms, prefix) {
           var computedTransform = typeof transformVal == 'function'
             ? transformVal
             : transformVal.transform
-          var keyType = (transformVal.prefixed === false || prefix === false)
+          var keyType = (transformVal.prefix === false || prefix === false)
             ? transformKey
             : concat(prefix + '_', transformKey)
           return [
